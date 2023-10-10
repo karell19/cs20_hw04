@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Joe's Hotdog Stand</title>
+        <meta name="author" content="Kevin Arellano Flores">
+        <meta name="description" content="A website meant to support Joe's Hotdog Stand Business.">
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <script>
+            var hotdog = 3.75;
+            var fries = 3.00;
+            var soda = 2.50;
+            var discount = 0.10;
+            var ma_tax = 0.0625;
+
+            /*
+             * makeOrder()
+             * Purpose:     Prompts the user for the input of the amount of
+             *              Hotdogs, French Fries, Sodas they want.
+             * Arguments:   None
+             */
+            function makeOrder()
+            {
+                var numDogs = prompt("How many hotdogs would you like?", 0);
+                var numFries = prompt("How many fries would you like?", 0);
+                var numSoda = prompt("And, how many sodas would you like?", 0);
+
+                calcTotal(numDogs, numFries, numSoda);
+            } 
+
+            /*
+             * calcTotal()
+             * Purpose:     Computes costs for a client's order.
+             * Arguments:   1) numDogs--Number of Hotdogs sought.
+             *              2) numFries--Number of French Fries sought.
+             *              3) numSoda--Number of Sodas sought.
+             * Effects:     Displays order's costs on "Receipt".
+             */
+            function calcTotal(numDogs, numFries, numSoda)
+            {
+                document.getElementById("count_hotdog").innerHTML = numDogs;
+                document.getElementById("price_total_hotdog").innerHTML = "$" + round_to_2(hotdog * numDogs);
+                
+                document.getElementById("count_fries").innerHTML = numFries;
+                document.getElementById("price_total_fries").innerHTML = "$" + round_to_2(fries * numFries);
+                
+                document.getElementById("count_drink").innerHTML = numSoda;
+                document.getElementById("price_total_soda").innerHTML = "$" + round_to_2(soda * numSoda);
+
+                var subtotal = (hotdog * numDogs) + (fries * numFries) + (soda * numSoda);
+                document.getElementById("before_discount").innerHTML = "$" + round_to_2(subtotal);
+
+                // Determines whether discount should be applied to order's cost.
+                if (subtotal > 25.00) { 
+                    document.getElementById("to_discount").innerHTML = round_to_2(discount * 100) + "%";
+                    document.getElementById("discount").innerHTML = "-$" + round_to_2(subtotal * discount);
+                    subtotal = subtotal - (subtotal * discount);
+                } else {
+                    document.getElementById("discount").innerHTML = "$" + round_to_2(0);
+                }
+                document.getElementById("with_discount").innerHTML = "$" + round_to_2(subtotal);
+                
+                document.getElementById("the_tax").innerHTML = round_to_2(ma_tax * 100) + "%";
+                document.getElementById("tax_added").innerHTML = "$" + round_to_2(subtotal * ma_tax);
+
+                // Applies Massachusett's state tax to order's cost.
+                subtotal = subtotal + (subtotal * ma_tax);
+                document.getElementById("final_total").innerHTML = "$" + round_to_2(subtotal);
+
+                document.getElementById("pay").style.visibility = "visible"
+            }
+
+            /*
+             * payUp()
+             * Purpose:     Displays "thank-you" message for client.
+             * Arguments:   None
+             */
+            function payUp()
+            {
+                alert("Thank you so much! Pleasure doing business with you.")
+            }
+
+            /*
+             * round_to_2()
+             * Purpose:     Rounds a numerical value to 2 decimal places.
+             * Arguments:   1) number--Numerical value to be rounded.
+             */
+            function round_to_2(number)
+            {        
+                var whole_num = Math.trunc(number);
+                var num_digits = whole_num.toString().length + 2;
+                return number.toPrecision(num_digits);
+            }
+        </script>
+    </head>
+    <body style="background-color: #abcfcd;">
+        <div class="wrapper">
+            <div class="header">
+                <p style="margin-top: 20px; margin-bottom: 2px; color: #ba0606; font-size: 30px">Welcome to Joe's Hotdog Stand!</p>
+                <p style="margin-top: 2px; margin-bottom: 20px; color: white; font-size: 20px;">Located in Medford, MA</p>
+            </div>
+            <div class="menu">
+                <p style="color: #ba0606; font-size: 20px; font-weight: bold">Menu:</p>
+                <table>
+                    <tr>
+                        <th>Item</th>
+                        <th>Price</th>
+                        <th>Image</th>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Hotdog</td>
+                        <td><p id="price_hotdog"></p></td>
+                        <td><img src="hotdog.jpg"></td>
+                    </tr>
+
+                    <tr>
+                        <td style="font-weight: bold">French Fries</td>
+                        <td><p id="price_fries"></p></td>
+                        <td><img src="fries.jpg"></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Soda</td>
+                        <td><p id="price_drink"></p></td>
+                        <td><img src="soda.jpg"></td>
+                    </tr>
+                </table>
+                <script>
+                    // Display price of items in "Menu."
+                    document.getElementById("price_hotdog").innerHTML = "$" + round_to_2(hotdog);
+                    document.getElementById("price_fries").innerHTML = "$" + round_to_2(fries);
+                    document.getElementById("price_drink").innerHTML = "$" + round_to_2(soda);
+                </script>
+            </div>
+            <div class="order_total">
+                <img src="hotdog_stand.jpg">
+                <input id="submit_order" type="button" value="Place a Delivery Order" onClick=makeOrder()></input>
+            </div>
+            <div class="receipt">
+                <p style="font-size: 20px; font-weight: bold">Receipt:</p>
+                <table style="border: 3px ridge black">
+                    <tr>
+                        <th>Item</th>
+                        <th>Count</th>
+                        <th>Cost</th>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Hotdog</td>
+                        <td><p id="count_hotdog"></p></td>
+                        <td><p id="price_total_hotdog"></p></td>
+                    </tr>
+
+                    <tr>
+                        <td style="font-weight: bold">French Fries</td>
+                        <td><p id="count_fries"></p></td>
+                        <td><p id="price_total_fries"></p></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Soda</td>
+                        <td><p id="count_drink"></p></td>
+                        <td><p id="price_total_soda"></p></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Subtotal (pre-discount)</td>
+                        <td><p> </p></td>
+                        <td><p id="before_discount"></p></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Discount</td>
+                        <td><p id="to_discount"></p></td>
+                        <td><p id="discount"></p></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Subtotal (inc. discount)</td>
+                        <td><p> </p></td>
+                        <td><p id="with_discount"></p></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Tax Amount</td>
+                        <td><p id="the_tax"></p></td>
+                        <td><p id="tax_added"></p></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Final Total</td>
+                        <td><p> </p></td>
+                        <td><p id="final_total"></p></td>
+                    </tr>
+                </table>
+                <p style="font-size: 10px; font-weight: bold">Joe's Hotdog Stand</p>
+                <input id="pay" class="pay" type="button" value="Pay" style="visibility: hidden" onClick=payUp()></input>
+            </div>
+        </div>
+    </body>
+</html>
